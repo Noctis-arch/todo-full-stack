@@ -40,6 +40,7 @@ export default function App() {
 
     console.log(newTodo);
 
+    setTodos([...todos, newTodo]);
 
   }
 
