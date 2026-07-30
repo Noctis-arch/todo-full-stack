@@ -40,6 +40,12 @@ export default function App() {
 
     console.log(newTodo);
 
+    // reset the input's value
+    inputRef.current.value = "";
+
+    // focus on the input
+    inputRef.current.focus();
+
     setTodos([...todos, newTodo]);
 
   }
@@ -57,7 +63,11 @@ export default function App() {
       <ul>
         {todos.map((todo) => 
           <li key={todo._id}>
-            <input type="checkbox" checked={todo.completed} />
+            <input 
+              type="checkbox" 
+              checked={todo.completed} 
+              onChange={() => {}}
+            />
             {todo.text}
           </li>
         )}
