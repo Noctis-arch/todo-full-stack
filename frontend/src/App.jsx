@@ -58,6 +58,8 @@ export default function App() {
       method: 'DELETE'
     });
 
+    // remove the todo item from our state
+
   }
 
   return (
