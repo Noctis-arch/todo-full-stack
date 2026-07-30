@@ -1,8 +1,10 @@
+import { useRef } from "react";
 import { useState, useEffect } from "react";
 
 export default function App() {
 
   const [todos, setTodos] = useState([]);
+  const inputRef = useRef();
 
   async function getData() {
     const response = await fetch('http://localhost:3000/api/todos');
@@ -15,9 +17,29 @@ export default function App() {
     getData();
   }, []);
 
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // package up our todo with the input value 
+    const todo = {
+      text: inputRef.current.value
+    };
+
+    console.log(todo);
+
+    // send this data as a POST request
+  }
+
   return (
     <div>
+
       <h1>Todos</h1>
+
+      <form onSubmit={handleSubmit}>
+        <input type="text" ref={inputRef} />
+        <button>Submit</button>
+      </form>
+
       <ul>
         {todos.map((todo) => 
           <li key={todo._id}>
@@ -26,6 +48,7 @@ export default function App() {
           </li>
         )}
       </ul>
+
     </div>
   )
 }
