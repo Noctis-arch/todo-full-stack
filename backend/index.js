@@ -1,11 +1,15 @@
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 
 const port = 3000;
 
+// allow requests from frontend
+app.use(cors());
+
 app.get('/test', (req, res) => {
-    res.send('Hello (from server)')
+    res.json('Hello (from server)')
 })
 
 app.listen(port, () => {
