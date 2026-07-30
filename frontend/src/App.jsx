@@ -7,6 +7,7 @@ export default function App() {
   const inputRef = useRef();
 
   async function getData() {
+    // get all todo items
     const response = await fetch('http://localhost:3000/api/todos');
     const data = await response.json();
     console.log(data);
@@ -46,8 +47,11 @@ export default function App() {
     // focus on the input
     inputRef.current.focus();
 
-    // updating the state with our new todo 
-    setTodos([...todos, newTodo]);
+    // retrieve our latest data from our database
+    getData();
+
+    // ALTERNATIVE: updating the state with our new todo 
+    // setTodos([...todos, newTodo]);
 
   }
 
@@ -58,8 +62,9 @@ export default function App() {
       method: 'DELETE'
     });
 
-    // remove the todo item from our state
-
+    // retrieve our latest data from our database
+    getData();
+    
   }
 
   return (
