@@ -19,16 +19,50 @@ app.use(express.json());
 
 // GET todos
 app.get('/api/todos', async (req, res) => {
-    const todos = await Todo.find({});
-    res.json(todos);
+    try {
+        const todos = await Todo.find({});
+        res.status(200).json(todos);
+    } catch(e) {
+        console.log(e);
+        res.status(400).json({ error: e.message })
+    }
 })
 
 // POST create a todo
 app.post('/api/todos', async (req, res) => {
-    console.log(req.body);
-    const todo = await Todo.create(req.body);
-    res.json(todo);
+    try {
+        console.log(req.body);
+        const todo = await Todo.create(req.body);
+        res.status(201).json(todo);
+    } catch(e) {
+        console.log(e);
+        res.status(400).json({ error: e.message })
+    }
 })
+
+// DELETE remove a todo
+app.delete('/api/todos/:id', async (req, res) => {
+    try {
+        const result = await Todo.findByIdAndDelete(req.params.id);
+        console.log(result);
+        res.status(200).json(result);
+    } catch(e) {
+        console.log(e);
+        res.status(400).json({ error: e.message })
+    }
+})
+
+// PUT updating a todo
+app.put('/api/todos/:id', async (req, res) => {
+    try {
+        const result = await Todo.findByIdAndUpdate(req.params.id, req.body);
+        console.log(result);
+        res.status(200).json(result);
+    } catch(e) {
+        console.log(e);
+        res.status(400).json({ error: e.message })
+    }
+});
 
 
 app.listen(port, () => {
