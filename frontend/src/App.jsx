@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 
 import { createTodo, deleteTodo, getTodos, updateTodo } from "./api";
 
+import Header from "./components/Header";
+import Form from "./components/Form";
+
 export default function App() {
 
   const [todos, setTodos] = useState([]);
-  const inputRef = useRef();
 
   async function getData() {
     // get all todo items
@@ -18,21 +20,9 @@ export default function App() {
     getData();
   }, []);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    // package up our todo with the input value 
-    const todo = {
-      text: inputRef.current.value
-    };
+  async function handleCreate(todo) {
 
     await createTodo(todo);
-
-    // reset the input's value
-    inputRef.current.value = "";
-
-    // focus on the input
-    inputRef.current.focus();
 
     // retrieve our latest data from our database
     getData();
@@ -43,29 +33,26 @@ export default function App() {
 
   async function handleDelete(id) {
 
-      await deleteTodo(id)
+    await deleteTodo(id)
 
-      // retrieve our latest data from our database
-      getData();
+    // retrieve our latest data from our database
+    getData();
   }
 
   async function handleUpdate(id) {
 
-      await updateTodo(todos, id);
+    await updateTodo(todos, id);
 
-      // retrieve our latest data from our database
-      getData();
+    // retrieve our latest data from our database
+    getData();
   }
 
   return (
     <div>
 
-      <h1>Todos</h1>
+      <Header />
 
-      <form onSubmit={handleSubmit}>
-        <input type="text" ref={inputRef} />
-        <button>Submit</button>
-      </form>
+      <Form handleCreate={handleCreate}/>
 
       <ul>
         {todos.map((todo) =>
