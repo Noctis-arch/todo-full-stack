@@ -5,6 +5,7 @@ import { createTodo, deleteTodo, getTodos, updateTodo } from "./api";
 
 import Header from "./components/Header";
 import Form from "./components/Form";
+import TodoList from "./components/TodoList";
 
 export default function App() {
 
@@ -52,21 +53,13 @@ export default function App() {
 
       <Header />
 
-      <Form handleCreate={handleCreate}/>
+      <Form handleCreate={handleCreate} />
 
-      <ul>
-        {todos.map((todo) =>
-          <li key={todo._id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => handleUpdate(todo._id)}
-            />
-            {todo.text}
-            <button onClick={() => handleDelete(todo._id)}>X</button>
-          </li>
-        )}
-      </ul>
+      <TodoList  
+        todos={todos}
+        handleDelete={handleDelete}
+        handleUpdate={handleUpdate}
+      />
 
     </div>
   )
