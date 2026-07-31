@@ -7,7 +7,7 @@ import Todo from '../models/todo.js'
 // GET todos
 router.get('/', async (req, res) => {
     try {
-        const todos = await Todo.find({});
+        const todos = await Todo.find({}).sort({ createdAt: -1 });
         res.status(200).json(todos);
     } catch(e) {
         console.log(e);
