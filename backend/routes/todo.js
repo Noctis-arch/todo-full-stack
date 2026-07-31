@@ -2,7 +2,7 @@ import express from 'express';
 
 const router = express.Router();
 
-import { getTodos, createTodo, updateTodo, deleteTodo } from '../controllers/todo';
+import { getTodos, createTodo, updateTodo, deleteTodo } from '../controllers/todo.js';
 
 // GET todos
 router.get('/', getTodos)

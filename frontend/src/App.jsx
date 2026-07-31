@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { useState, useEffect } from "react";
 
+import { createTodo, deleteTodo, getTodos, updateTodo } from "./api";
+
 export default function App() {
 
   const [todos, setTodos] = useState([]);
@@ -8,14 +10,8 @@ export default function App() {
 
   async function getData() {
     // get all todo items
-    try {
-      const response = await fetch('http://localhost:3000/api/todos');
-      const data = await response.json();
-      console.log(data);
-      setTodos(data);
-    } catch (e) {
-      console.log(e);
-    }
+    const data = await getTodos();
+    setTodos(data);
   }
 
   useEffect(() => {
@@ -25,88 +21,40 @@ export default function App() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
+    // package up our todo with the input value 
+    const todo = {
+      text: inputRef.current.value
+    };
 
-      // package up our todo with the input value 
-      const todo = {
-        text: inputRef.current.value
-      };
+    await createTodo(todo);
 
-      console.log(todo);
+    // reset the input's value
+    inputRef.current.value = "";
 
-      // send this data as a POST request
-      const response = await fetch('http://localhost:3000/api/todos', {
-        method: 'POST',
-        body: JSON.stringify(todo),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+    // focus on the input
+    inputRef.current.focus();
 
-      const newTodo = await response.json();
+    // retrieve our latest data from our database
+    getData();
 
-      console.log(newTodo);
-
-      // reset the input's value
-      inputRef.current.value = "";
-
-      // focus on the input
-      inputRef.current.focus();
-
-      // retrieve our latest data from our database
-      getData();
-
-      // ALTERNATIVE: updating the state with our new todo 
-      // setTodos([...todos, newTodo]);
-    } catch (e) {
-      console.log(e);
-    }
-
+    // ALTERNATIVE: updating the state with our new todo 
+    // setTodos([...todos, newTodo]);
   }
 
   async function handleDelete(id) {
 
-    try {
-      console.log(id);
-      // delete the todo we clicked on using its id
-      await fetch(`http://localhost:3000/api/todos/${id}`, {
-        method: 'DELETE'
-      });
+      await deleteTodo(id)
 
       // retrieve our latest data from our database
       getData();
-    } catch (e) {
-      console.log(e);
-    }
-
   }
 
   async function handleUpdate(id) {
 
-    try {
-
-      // find the todo in our state 
-      const todo = todos.find((todo) => todo._id == id);
-
-      // update the value of the completed property 
-      todo.completed = !todo.completed
-
-      // send the updated todo in a PUT request
-      await fetch(`http://localhost:3000/api/todos/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(todo),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      await updateTodo(todos, id);
 
       // retrieve our latest data from our database
       getData();
-      
-    } catch (e) {
-      console.log(e);
-    }
-
   }
 
   return (
